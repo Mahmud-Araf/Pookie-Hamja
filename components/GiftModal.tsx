@@ -39,8 +39,6 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
       (gift) => gift.current_count < gift.total_count
     );
 
-    console.log(availableGifts);
-
     if (availableGifts.length === 0) return null;
 
     const totalProbability = availableGifts.reduce(
@@ -66,18 +64,19 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
       const gift = selectRandomGift();
       setSelectedGift(gift);
       setIsRevealed(true);
-      setTimeout(() => {
-        localStorage.setItem("claim", "true");
-        setIsClaimed(true);
-      }, 3000);
     }
   };
 
   const handleClose = () => {
-    setIsRevealed(false);
-    setSelectedGift(null);
-    setIsNameEntered(false);
-    setName("");
+    if (!isRevealed) {
+      setIsNameEntered(false);
+      setName("");
+    }
+    else {
+        setIsClaimed(true);
+        localStorage.setItem("claim", "true");
+    }
+    
     onClose();
   };
 
@@ -119,7 +118,7 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
                   Naughty Pookie !!!
                 </p>
                 <p
-                  className={`${sriracha.className} text-lg font-bold text-slate-600 mb-2`}
+                  className={`${sriracha.className} text-lg font-bold text-slate-600 mb-2 text-center`}
                 >
                   You have already claimed your gift !
                 </p>

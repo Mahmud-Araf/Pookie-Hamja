@@ -55,46 +55,77 @@ export default function Landing() {
     <div className="bg-gradient-to-b p-5 from-pink-100 via-pink-200 to-pink-300 max-w-full min-h-screen flex flex-col items-center justify-start overflow-hidden relative">
       {/* Decorative Bow Ties */}
       <BowTie
-        className="text-pink-300 text-4xl top-20 left-[10%]"
+        className="text-pink-300 text-4xl top-[5%] left-[10%]"
         delay={0.2}
         rotate={-15}
-        scale={0.8}
+        scale={0.5}
       />
       <BowTie
-        className="text-pink-400 text-5xl top-40 right-[15%]"
+        className="text-pink-400 text-5xl top-[10%] right-[5%]"
         delay={0.4}
         rotate={25}
-        scale={0.8}
+        scale={0.5}
       />
       <BowTie
-        className="text-pink-500 text-3xl bottom-[30%] left-[20%]"
+        className="text-pink-500 text-3xl bottom-[35%] left-[8%]"
         delay={0.6}
         rotate={-30}
         scale={0.8}
       />
       <BowTie
-        className="text-pink-600/70 text-6xl bottom-[5%] right-[10%]"
+        className="text-pink-600/70 text-6xl bottom-[15%] right-[5%]"
         delay={0.8}
         rotate={45}
         scale={1.2}
       />
       <BowTie
-        className="text-pink-400/50 text-7xl top-[40%] left-[5%]"
+        className="text-pink-400/50 text-7xl top-[45%] left-[3%]"
         delay={1}
         rotate={15}
         scale={0.8}
       />
       <BowTie
-        className="text-pink-500/60 text-5xl top-[35%] right-[8%]"
+        className="text-pink-500/60 text-5xl top-[35%] right-[12%]"
         delay={1.2}
         rotate={-20}
         scale={0.7}
       />
       <BowTie
-        className="text-pink-500/70 text-5xl top-[75%] left-[8%]"
+        className="text-pink-500/70 text-5xl bottom-[25%] left-[20%]"
         delay={1.2}
         rotate={-20}
         scale={0.7}
+      />
+      {/* New Bow Ties */}
+      <BowTie
+        className="text-pink-400/60 text-4xl top-[23%] left-[30%]"
+        delay={1.3}
+        rotate={35}
+        scale={0.6}
+      />
+      <BowTie
+        className="text-pink-500/50 text-6xl bottom-[40%] right-[25%]"
+        delay={1.4}
+        rotate={-25}
+        scale={0.9}
+      />
+      <BowTie
+        className="text-pink-300/70 text-5xl top-[60%] right-[15%]"
+        delay={1.5}
+        rotate={15}
+        scale={0.7}
+      />
+      <BowTie
+        className="text-pink-600/40 text-4xl bottom-[10%] left-[35%]"
+        delay={1.6}
+        rotate={-40}
+        scale={0.6}
+      />
+      <BowTie
+        className="text-pink-400/60 text-5xl top-[35%] left-[40%]"
+        delay={1.7}
+        rotate={20}
+        scale={0.65}
       />
 
       <motion.div
@@ -112,8 +143,7 @@ export default function Landing() {
                     drop-shadow-lg relative z-10
                 `}
       >
-        "আসন্ন মিস্টার আনন্দ নির্বাচনে হামজা ভাইকে পুকি মার্কায় ভোট দিয়ে
-        জয়যুক্ত করুন"
+        "মিস্টার আনন্দ ২০২৫ উপলক্ষে 'পুকি' মার্কা প্রার্থী হামজা হামি এর পক্ষ থেকে নিজের উপহারটা বুঝে নিন!"
       </motion.div>
 
       <div className="w-full p-5 md:h-[90vh] flex flex-col-reverse md:flex-row items-center justify-start md:justify-around gap-8 relative z-10">
