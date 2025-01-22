@@ -138,7 +138,7 @@ export default function Landing() {
           duration: 1.2,
           ease: "easeOut",
         }}
-        className={`${hindSiliguri.className} p-8 w-full text-3xl text-center md:text-4xl font-bold text-pink-600 tracking-normal
+        className={`${hindSiliguri.className} p-4 w-full text-3xl text-center md:text-4xl font-bold text-pink-600 tracking-normal
                     hover:scale-105 transition-transform duration-300 ease-in-out cursor-text
                     drop-shadow-lg relative z-10
                 `}
