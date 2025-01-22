@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { GiBowTieRibbon } from "react-icons/gi";
 import { FiGift } from "react-icons/fi";
 import GiftModal from "./GiftModal";
+import { useMediaQuery } from 'react-responsive';
 
 
 const Lottie = dynamic(() => import("lottie-react"), {
@@ -46,10 +47,39 @@ const BowTie = ({
 export default function Landing() {
   const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  
+  // Check if mobile view
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    // Mobile animation sequence
+    if (isMobile) {
+      // Start with Lottie animation for 4 seconds
+      const imageTimer = setTimeout(() => {
+        setShowImage(true);
+        // Show image for 1 second then go back to animation
+        setTimeout(() => {
+          setShowImage(false);
+        }, 1500);
+      }, 4000);
+
+      // Repeat the sequence
+      const interval = setInterval(() => {
+        setShowImage(true);
+        setTimeout(() => {
+          setShowImage(false);
+        }, 1500);
+      }, 5500); // Total cycle: 4s animation + 1.5s image
+
+      return () => {
+        clearTimeout(imageTimer);
+        clearInterval(interval);
+      };
+    }
+  }, [isMobile]);
 
   return (
     <div className="bg-gradient-to-b p-5 from-pink-100 via-pink-200 to-pink-300 max-w-full min-h-screen flex flex-col items-center justify-start overflow-hidden relative">
@@ -146,16 +176,16 @@ export default function Landing() {
         "মিস্টার আনন্দ ২০২৫ উপলক্ষে 'পুকি' মার্কা প্রার্থী হামজা হামি এর পক্ষ থেকে নিজের উপহারটা বুঝে নিন!"
       </motion.div>
 
-      <div className="w-full p-5 md:h-[90vh] flex flex-col-reverse md:flex-row items-center justify-start md:justify-around gap-8 relative z-10">
+      <div className="w-full p-2 md:p-1 md:h-[90vh] flex flex-col-reverse md:flex-row items-center justify-start md:justify-around gap-8 relative z-10">
         <div className="flex flex-col items-center justify-center gap-0">
-        <div className={`${sriracha.className} drop-shadow-lg text-2xl p-3 text-pink-600 font-bold w-full text-center text-nowrap`}>
+        <div className={`${sriracha.className} border-4 border-pink-500 rounded-md drop-shadow-lg text-2xl p-2 mb-4 text-pink-500 font-bold w-full text-center text-nowrap`}>
             Vote Hamja, Your Mr.Ananda !!!
         </div>
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] relative group"
+          className="hidden md:block w-[280px] h-[280px] md:w-[400px] md:h-[400px] relative group"
         >
           <img
             src="/hamza.jpg"
@@ -173,12 +203,12 @@ export default function Landing() {
           />
         </motion.div>
         </div>
-        <div className="flex flex-col items-center justify-center gap-0">
+        <div className="flex flex-col items-center justify-center gap-0 p-4">
            <motion.button 
              whileHover={{ scale: 1.05 }}
              whileTap={{ scale: 0.95 }}
              onClick={() => setIsModalOpen(true)}
-             className={`${sriracha.className} flex items-center gap-3 bg-pink-600 text-white text-xl md:text-2xl px-6 py-3 rounded-full 
+             className={`${sriracha.className} flex items-center gap-3 bg-pink-600 text-white text-xl md:text-2xl mb-8 px-6 py-3 rounded-full 
                shadow-lg hover:shadow-xl hover:bg-pink-500 transition-all duration-300 relative z-10
                border-2 border-white/20 backdrop-blur-sm`}
            >
@@ -204,7 +234,29 @@ export default function Landing() {
             className="w-[280px] h-[280px] md:w-[400px] md:h-[400px]"
           >
             {mounted && (
-              <Lottie animationData={animationData} className="w-full h-full" />
+              <>
+                {(!isMobile || !showImage) && (
+                  <Lottie animationData={animationData} className="w-full h-full" />
+                )}
+                {isMobile && showImage && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full h-full relative"
+                  >
+                    <img
+                      src="/hamza.jpg"
+                      alt="Hamza"
+                      className="w-full h-full rounded-full object-cover 
+                        transition-all duration-300 ease-in-out
+                        group-hover:scale-105 group-hover:shadow-xl
+                        group-hover:shadow-pink-500/30
+                        border-4 border-pink-400"
+                    />
+                  </motion.div>
+                )}
+              </>
             )}
           </motion.div>
         </div>
