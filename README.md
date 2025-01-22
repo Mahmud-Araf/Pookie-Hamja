@@ -84,4 +84,6 @@ Feel free to contribute to this project by submitting issues or pull requests.
 
 ## License
 
-[MIT License](LICENSE)
+[Creative Commons Attribution-NonCommercial 4.0](LICENSE)
+
+This project is licensed under CC BY-NC 4.0 which means you can freely use and adapt this work for non-commercial purposes, as long as you provide attribution.
