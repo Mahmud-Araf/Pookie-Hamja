@@ -1,0 +1,54 @@
+{
+  "gifts": [
+    {
+      "item_name": "Center Fruit",
+      "probability": 0.30,
+      "total_count": 50,
+      "current_count": 0,
+      "image_url": "/centerfruit.jpg"
+    },
+    {
+        "item_name": "KitKat",
+        "probability": 0.10,
+        "total_count": 5,
+        "current_count": 0,
+        "image_url": "/kitkat.jpg"
+    },
+    {
+        "item_name": "Cadbury",
+        "probability": 0.10,
+        "total_count": 5,
+        "current_count": 0,
+        "image_url": "/cadbury.jpg"
+    },
+    {
+        "item_name": "Chicken Biryani",
+        "probability": 0.05,
+        "total_count": 1,
+        "current_count": 0,
+        "image_url": "/chicken.jpg"
+    },
+    {
+        "item_name": "Peanut Bar",
+        "probability": 0.15,
+        "total_count": 10,
+        "current_count": 0,
+        "image_url": "/peanut.jpeg"
+    },
+    {
+        "item_name": "Kurkure Chips",
+        "probability": 0.15,
+        "total_count": 10,
+        "current_count": 0,
+        "image_url": "/kurkure.jpg"
+    }, 
+    {
+        "item_name": "Mojo",
+        "probability": 0.15,
+        "total_count": 7,
+        "current_count": 0,
+        "image_url": "/mojo.jpeg"
+    }
+   
+  ]
+} 

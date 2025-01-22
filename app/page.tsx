@@ -1,4 +1,10 @@
-export default function page() {
-  return <div>Hello World</div>;
+import Landing from "@/components/Landing"
+
+export default function Page() {
+  return (
+    <div>
+      <Landing />
+    </div>
+  );
 }
 
