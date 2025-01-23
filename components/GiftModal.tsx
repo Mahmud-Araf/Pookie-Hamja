@@ -2,8 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FiGift, FiX } from "react-icons/fi";
-import giftData from "@/data/gifts.json";
+import { FiGift, FiX, FiLoader } from "react-icons/fi";
 import Image from "next/image";
 import { sriracha } from "@/lib/font";
 
@@ -13,6 +12,7 @@ interface Gift {
   total_count: number;
   current_count: number;
   image_url: string;
+  id: string;
 }
 
 interface GiftModalProps {
@@ -26,16 +26,26 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
   const [name, setName] = useState("");
   const [isNameEntered, setIsNameEntered] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
+  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [isRevealing, setIsRevealing] = useState(false);
 
+  // Fetch gifts on mount
   useEffect(() => {
-    const claim = localStorage.getItem("claim");
-    if (claim) {
-      setIsClaimed(true);
-    }
+    const fetchGifts = async () => {
+      try {
+        const response = await fetch('/api/gifts');
+        const data = await response.json();
+        setGifts(data.gifts);
+      } catch (error) {
+        console.error('Failed to fetch gifts:', error);
+      }
+    };
+
+    fetchGifts();
   }, []);
 
-  const selectRandomGift = () => {
-    const availableGifts = giftData.gifts.filter(
+  const selectRandomGift = async () => {
+    const availableGifts = gifts.filter(
       (gift) => gift.current_count < gift.total_count
     );
 
@@ -45,25 +55,75 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
       (sum, gift) => sum + gift.probability,
       0
     );
-
+    
     let random = Math.random() * totalProbability;
-
+    
     for (const gift of availableGifts) {
       random -= gift.probability;
       if (random <= 0) {
-        gift.current_count++;
-        return gift;
+        // Update gift count in Firebase
+        try {
+          await fetch('/api/gifts', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              giftId: gift.id,
+              current_count: gift.current_count + 1
+            }),
+          });
+          
+          // Update local state
+          setGifts(prevGifts =>
+            prevGifts.map(g =>
+              g.id === gift.id
+                ? { ...g, current_count: g.current_count + 1 }
+                : g
+            )
+          );
+          
+          return gift;
+        } catch (error) {
+          console.error('Failed to update gift count:', error);
+          return null;
+        }
       }
     }
-
+    
     return availableGifts[0];
   };
 
-  const handleBoxClick = () => {
-    if (!isRevealed) {
-      const gift = selectRandomGift();
-      setSelectedGift(gift);
-      setIsRevealed(true);
+  const handleBoxClick = async () => {
+    if (!isRevealed && !isRevealing) {
+      setIsRevealing(true);
+      try {
+        const gift = await selectRandomGift();
+        if (gift) {
+          try {
+            await fetch('/api/winners', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                name,
+                gift_id: gift.id,
+                gift_name: gift.item_name,
+                claimed_at: new Date().toISOString(),
+              }),
+            });
+          } catch (error) {
+            console.error('Failed to save winner:', error);
+          }
+        }
+        setSelectedGift(gift);
+        setIsRevealed(true);
+      } catch (error) {
+        console.error('Error revealing gift:', error);
+      } finally {
+        setIsRevealing(false);
+      }
     }
   };
 
@@ -71,19 +131,30 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
     if (!isRevealed) {
       setIsNameEntered(false);
       setName("");
-    }
-    else {
-        setIsClaimed(true);
-        localStorage.setItem("claim", "true");
+    } else {
+      setIsClaimed(true);
     }
     
     onClose();
   };
 
-  const handleNameSubmit = (e: React.FormEvent) => {
+  const handleNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
-      setIsNameEntered(true);
+      try {
+        // Check if user has already won
+        const response = await fetch(`/api/winners/check?name=${encodeURIComponent(name.trim())}`);
+        const data = await response.json();
+        
+        if (data.hasWon) {
+          setIsClaimed(true);
+        } else {
+          setIsNameEntered(true);
+        }
+      } catch (error) {
+        console.error('Failed to check winner status:', error);
+        setIsNameEntered(true); // Allow to continue if check fails
+      }
     }
   };
 
@@ -112,14 +183,10 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
             </button>
             {isClaimed ? (
               <div className="flex flex-col items-center gap-6">
-                <p
-                  className={`${sriracha.className} text-xl font-bold text-pink-600 mb-2`}
-                >
+                <p className={`${sriracha.className} text-xl font-bold text-pink-600 mb-2`}>
                   Naughty Pookie !!!
                 </p>
-                <p
-                  className={`${sriracha.className} text-lg font-bold text-slate-600 mb-2 text-center`}
-                >
+                <p className={`${sriracha.className} text-lg font-bold text-slate-600 mb-2 text-center`}>
                   You have already claimed your gift !
                 </p>
               </div>
@@ -154,15 +221,13 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
                   </motion.form>
                 ) : !isRevealed ? (
                   <>
-                    <h3
-                      className={`${sriracha.className} text-xl text-pink-600 text-center text-ellipsis font-bold mb-4`}
-                    >
+                    <h3 className={`${sriracha.className} text-xl text-pink-600 text-center text-ellipsis font-bold mb-4`}>
                       Click to know your gift, {name}!
                     </h3>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      animate={{
+                      whileHover={{ scale: isRevealing ? 1 : 1.05 }}
+                      whileTap={{ scale: isRevealing ? 1 : 0.95 }}
+                      animate={isRevealing ? {} : {
                         rotate: [0, -10, 10, -10, 10, 0],
                       }}
                       transition={{
@@ -171,13 +236,17 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
                         repeatType: "reverse",
                       }}
                       onClick={handleBoxClick}
-                      className="w-32 h-32 bg-pink-600 rounded-lg flex items-center justify-center text-white cursor-pointer"
+                      disabled={isRevealing}
+                      className={`w-32 h-32 bg-pink-600 rounded-lg flex items-center justify-center text-white
+                        ${isRevealing ? 'cursor-not-allowed opacity-80' : 'cursor-pointer'}`}
                     >
-                      <FiGift size={64} />
+                      {isRevealing ? (
+                        <FiLoader size={64} className="animate-spin" />
+                      ) : (
+                        <FiGift size={64} />
+                      )}
                     </motion.button>
-                    <h3
-                      className={`${sriracha.className} text-xl text-pink-600 text-center text-ellipsis font-bold mb-4`}
-                    >
+                    <h3 className={`${sriracha.className} text-xl text-pink-600 text-center text-ellipsis font-bold mb-4`}>
                       Don't forget to take a screenshot!
                     </h3>
                   </>
@@ -189,10 +258,8 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
                   >
                     {selectedGift ? (
                       <>
-                        <h3
-                          className={`${sriracha.className} text-xl font-bold text-pink-600`}
-                        >
-                          Congratulations {name} !
+                        <h3 className={`${sriracha.className} text-xl font-bold text-pink-600`}>
+                          Congratulations {name}!
                         </h3>
                         <div className="w-40 h-40 relative mx-auto mb-2">
                           <Image
@@ -202,17 +269,11 @@ export default function GiftModal({ isOpen, onClose }: GiftModalProps) {
                             className="object-contain"
                           />
                         </div>
-
-                        <p
-                          className={`${sriracha.className} text-xl font-bold text-slate-600 mb-2`}
-                        >
-                          {" "}
+                        <p className={`${sriracha.className} text-xl font-bold text-slate-600 mb-2`}>
                           You won {selectedGift.item_name}!
                         </p>
-                        <h3
-                          className={`${sriracha.className} text-xl font-bold text-pink-600 mb-2`}
-                        >
-                          Vote Pookie ! Vote Hamja Hami !
+                        <h3 className={`${sriracha.className} text-xl font-bold text-pink-600 mb-2`}>
+                          Vote Pookie! Vote Hamja Hami!
                         </h3>
                       </>
                     ) : (

@@ -1,54 +1,60 @@
 {
   "gifts": [
     {
+      "id": "27211CUPVEDhDAVCpMbj",
+      "item_name": "Kurkure Chips",
+      "probability": 0.15,
+      "total_count": 10,
+      "current_count": 0,
+      "image_url": "/kurkure.jpg"
+    },
+    {
+      "id": "ByxTSluTYo6Z6IB3UxVn",
       "item_name": "Center Fruit",
-      "probability": 0.30,
+      "probability": 0.3,
       "total_count": 50,
       "current_count": 0,
       "image_url": "/centerfruit.jpg"
     },
     {
-        "item_name": "KitKat",
-        "probability": 0.10,
-        "total_count": 5,
-        "current_count": 0,
-        "image_url": "/kitkat.jpg"
+      "id": "EntWZMY88iEukT8l9prq",
+      "item_name": "Mojo",
+      "probability": 0.15,
+      "total_count": 7,
+      "current_count": 0,
+      "image_url": "/mojo.jpeg"
     },
     {
-        "item_name": "Cadbury",
-        "probability": 0.10,
-        "total_count": 5,
-        "current_count": 0,
-        "image_url": "/cadbury.jpg"
+      "id": "WIcOGS0eQ3wAMzICC2rQ",
+      "item_name": "Chicken Biryani",
+      "probability": 0.05,
+      "total_count": 1,
+      "current_count": 0,
+      "image_url": "/chicken.jpg"
     },
     {
-        "item_name": "Chicken Biryani",
-        "probability": 0.05,
-        "total_count": 1,
-        "current_count": 0,
-        "image_url": "/chicken.jpg"
+      "id": "hXlWkJ0OLh98IMAMBt22",
+      "item_name": "Cadbury",
+      "probability": 0.1,
+      "total_count": 5,
+      "current_count": 0,
+      "image_url": "/cadbury.jpg"
     },
     {
-        "item_name": "Peanut Bar",
-        "probability": 0.15,
-        "total_count": 10,
-        "current_count": 0,
-        "image_url": "/peanut.jpeg"
+      "id": "z5QmGXk7cKTQIfsh4PEm",
+      "item_name": "KitKat",
+      "probability": 0.1,
+      "total_count": 5,
+      "current_count": 0,
+      "image_url": "/kitkat.jpg"
     },
     {
-        "item_name": "Kurkure Chips",
-        "probability": 0.15,
-        "total_count": 10,
-        "current_count": 0,
-        "image_url": "/kurkure.jpg"
-    }, 
-    {
-        "item_name": "Mojo",
-        "probability": 0.15,
-        "total_count": 7,
-        "current_count": 0,
-        "image_url": "/mojo.jpeg"
+      "id": "zvTPjcnfTHjnqotkQUj3",
+      "item_name": "Peanut Bar",
+      "probability": 0.15,
+      "total_count": 10,
+      "current_count": 0,
+      "image_url": "/peanut.jpeg"
     }
-   
   ]
 } 
