@@ -24,21 +24,34 @@ export async function POST(request: Request) {
   try {
     console.log('Starting reset process...');
     const giftsRef = collection(db, 'gifts');
+    const winnersRef = collection(db, 'winners');
     
-    // Delete all existing documents first
-    console.log('Fetching existing documents...');
-    const snapshot = await getDocs(giftsRef);
-    console.log(`Found ${snapshot.docs.length} documents to delete`);
+    // Delete all existing winners first
+    console.log('Fetching existing winners...');
+    const winnersSnapshot = await getDocs(winnersRef);
+    console.log(`Found ${winnersSnapshot.docs.length} winners to delete`);
     
-    const deletePromises = snapshot.docs.map(doc => {
-      console.log(`Deleting document ${doc.id}...`);
+    const deleteWinnersPromises = winnersSnapshot.docs.map(doc => {
+      console.log(`Deleting winner ${doc.id}...`);
       return deleteDoc(doc.ref);
     });
-    await Promise.all(deletePromises);
-    console.log('All documents deleted');
+    await Promise.all(deleteWinnersPromises);
+    console.log('All winners deleted');
     
-    // Add gifts from gifts.json with their specific IDs
-    console.log('Adding new documents...');
+    // Delete all existing gifts
+    console.log('Fetching existing gifts...');
+    const giftsSnapshot = await getDocs(giftsRef);
+    console.log(`Found ${giftsSnapshot.docs.length} gifts to delete`);
+    
+    const deleteGiftsPromises = giftsSnapshot.docs.map(doc => {
+      console.log(`Deleting gift ${doc.id}...`);
+      return deleteDoc(doc.ref);
+    });
+    await Promise.all(deleteGiftsPromises);
+    console.log('All gifts deleted');
+    
+    // Add new gifts from gifts.json
+    console.log('Adding new gifts...');
     const addPromises = giftData.gifts.map(gift => {
       console.log(`Adding gift: ${gift.item_name}`);
       return setDoc(doc(giftsRef, gift.id), {
@@ -53,11 +66,11 @@ export async function POST(request: Request) {
     await Promise.all(addPromises);
     console.log('All documents added successfully');
     
-    return NextResponse.json({ message: 'Gifts reset successfully' });
+    return NextResponse.json({ message: 'Gifts and winners reset successfully' });
   } catch (error) {
     console.error('Error in POST /api/gifts:', error);
     return NextResponse.json({ 
-      error: 'Failed to reset gifts',
+      error: 'Failed to reset gifts and winners',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }

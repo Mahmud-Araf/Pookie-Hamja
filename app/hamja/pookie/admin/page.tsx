@@ -64,7 +64,7 @@ export default function AdminPage() {
   }, []);
 
   const handleReset = async () => {
-    if (!confirm("Are you sure you want to reset all gifts?")) return;
+    if (!confirm("Are you sure you want to reset all gifts and winners?")) return;
     
     setIsLoading(true);
     setMessage("");
@@ -82,17 +82,17 @@ export default function AdminPage() {
       console.log("Response:", { status: response.status, data });
 
       if (!response.ok) {
-        throw new Error(data.details || data.error || 'Failed to reset gifts');
+        throw new Error(data.details || data.error || 'Failed to reset');
       }
       
-      setMessage("Gifts reset successfully!");
-      await fetchGifts();
+      setMessage("Gifts and winners reset successfully!");
+      await Promise.all([fetchGifts(), fetchWinners()]); // Refresh both lists
     } catch (error: unknown) {
       console.error('Reset error:', error);
       if (error instanceof Error) {
-        setMessage("Error resetting gifts: " + error.message);
+        setMessage("Error resetting: " + error.message);
       } else {
-        setMessage("Error resetting gifts: An unknown error occurred");
+        setMessage("Error resetting: An unknown error occurred");
       }
     } finally {
       setIsLoading(false);
