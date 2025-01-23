@@ -1,11 +1,14 @@
 # Pookie Gift Campaign
 
-A Next.js-based interactive gift campaign website for Mr. Ananda election candidate Hamja Hami. Users can claim virtual gifts through an engaging animated interface.
+A Next.js-based interactive gift campaign website for Mr. Ananda election candidate Hamja Hami. Users can claim virtual gifts through an engaging animated interface with Firebase backend for persistent data storage.
 
 ## Features
 
 - Interactive gift claiming system with probability-based rewards
-- One-time gift claim per user with local storage persistence
+- Firebase backend for persistent data storage
+- Admin panel for gift and winner management
+- Real-time gift inventory tracking
+- Winner history with deletion capability
 - Animated UI elements using Framer Motion
 - Responsive design for all devices
 - Bengali language support with Hind Siliguri font
@@ -15,6 +18,7 @@ A Next.js-based interactive gift campaign website for Mr. Ananda election candid
 ## Tech Stack
 
 - **Framework**: Next.js 14 with App Router
+- **Backend**: Firebase (Firestore)
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Icons**: React Icons
@@ -35,19 +39,39 @@ npm install
 yarn install
 ```
 
-3. Run the development server:
+3. Set up Firebase:
+   - Create a Firebase project
+   - Enable Firestore Database
+   - Add your Firebase config to `.env.local`:
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Project Structure
 
 ```
 ├── app/
+│   ├── api/
+│   │   ├── gifts/
+│   │   └── winners/
+│   ├── hamja/
+│   │   └── pookie/
+│   │       └── admin/
 │   ├── layout.tsx
 │   ├── page.tsx
 │   └── globals.css
@@ -56,12 +80,13 @@ yarn dev
 │   └── GiftModal.tsx
 ├── data/
 │   └── gifts.json
-├── public/
-│   ├── gifts/
-│   ├── pookie.json
-│   └── hamza.jpg
-└── lib/
-    └── font.ts
+├── lib/
+│   ├── firebase.ts
+│   └── font.ts
+└── public/
+    ├── gifts/
+    ├── pookie.json
+    └── hamza.jpg
 ```
 
 ## Gift System
@@ -71,12 +96,23 @@ The gift system uses a probability-based algorithm to distribute gifts fairly. E
 - Total count limit
 - Current count tracking
 - Associated image
+- Persistent storage in Firebase
+
+## Admin Panel
+
+Access the admin panel at `/hamja/pookie/admin` to:
+- View current gift inventory
+- Reset all gifts to initial state
+- View winner history
+- Delete individual winners
+- Monitor gift claim statistics
 
 ## Customization
 
 1. Edit `data/gifts.json` to modify available gifts and their probabilities
 2. Update images in `public/gifts/` directory
 3. Modify animations and styling in respective components
+4. Configure Firebase rules for production
 
 ## Contributing
 
