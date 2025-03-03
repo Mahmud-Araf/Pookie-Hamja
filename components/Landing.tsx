@@ -60,7 +60,7 @@ export default function Landing() {
       // Start with Lottie animation for 4 seconds
       const imageTimer = setTimeout(() => {
         setShowImage(true);
-        // Show image for 1 second then go back to animation
+        // Show image for 1.5 second then go back to animation
         setTimeout(() => {
           setShowImage(false);
         }, 1500);
